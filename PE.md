@@ -6,7 +6,7 @@
 * 后四位是文件头偏移量(LONG e_lfanew),不固定,采用小端序
 
 ### PE文件头(aka NT头)
-* 前四位是PE文件头标志(DWORD Signature),固定值|45|50|00|00|(0x00005045)
+* 前四位是PE文件头标志(DWORD Signature),固定值|50|45|00|00|(0x00004550)
 * 紧接着两位(第5·6位)是运行平台(WORD Machine)，一般为|4C|01|(0x014C)
 * 再后两位(第7·8位)是section个数(WORD NumberOfSections),不固定
 * 再后四位(第9·10·11·12位)是时间戳(DWORD TimeDateStamp)
