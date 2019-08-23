@@ -37,12 +37,31 @@
 * 接下来二十位不重要(第73到92位）
 * 接下来四位(第93·94·95·96位)是数据目录表个数(DWORD NumberOfRvaAndSizes),|10|00|00|00|(0x00000010)
 * 接下来是扩数据目录表数组128个字节(80h)
+* 一共均分成16份，每份占8H
+* 8H中前4H是这个部分在文件中的RVA，后4H是这个部分占的大小
 
 ## 一些数值的计算
 * imageBase --- 当被以进程方式加载到内存时的期望基址
 * offset  --- 在以文件形式被读取时，
 * raw  --- 当以文件形式被读取时，(xxx在十六进制文件中的)实际地址
 * va   --- 当以进程方式加载到内存时，(xxx在内存中的)实际地址
+* RVA  --- 当以进程方式加载到内存时,(xxx在内存中相对于基址的)地址，是个相对的概念，一定要有个参照物
+* AddressOfNewExeHeader --- 记录PE部分的起始位置
+* NumberOfSections --- 段(section)的数量
+* SizeOfOptionalHeader --- 扩展头大小，32位是|E0|00|,64位是|F0|00|
+* OPTIONAL_MAGIC --- 魔数，32位系统是|0B|01|,64位系统是|0B|02|
+* SizeOfCode --- code段的大小，这个段必须存在
+* SizeOfInitializedData --- data段的大小，这个段必须存在
+* AddressOfEntryPoint --- 程序入口地址RVA
+* BaseOfCode --- code段的起始地址RVA，必须是SectionAlignment的整数倍
+* BaseOfData --- data段的起始地址RVA，必须是FileAlignment的整数倍
+* SectionAlignment --- 在读取到内存时，每个段需要对齐的字节,1000h(4K对齐)
+* FileAlignment --- 在文件中，每个段需要对齐的字节，200h
+* MajorOperatingSystemVersion --- 操作系统版本要求
+* MajorSubsystemVersion --- 子系统版本要求
+* SizeOfImage --- 所有的段的大小加起来(是内存中的值，而且需要对齐)，所以这个值一定是SectionAlignment的整数倍
+* SizeOfHeaders --- dos头(包括)到区段表(包括)，也就是除了段之外的其他内容的大小，对齐标准是文件中的概念，所以是FileAlignment的整数倍
+
 ```
 当文件未被加载到内存时:
 文件的基址为0
